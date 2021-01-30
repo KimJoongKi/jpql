@@ -47,6 +47,37 @@ import java.util.List;
 //
 //        System.out.println("resultList = " + resultList.size());
 
+//타입 표현
+//        String query = "select m.username, 'HELLO', TRUE from Member m " +
+//        "where m.memberType = :userType";
+//        List<Object[]> result = em.createQuery(query)
+//        .setParameter("userType", MemberType.ADMIN)
+//        .getResultList();
+//
+//        for (Object[] objects : result) {
+//        System.out.println("objects[0] = " + objects[0]);
+//        System.out.println("objects[0] = " + objects[1]);
+//        System.out.println("objects[0] = " + objects[2]);
+//        }
+
+//조건식
+//        String query =
+//        "select " +
+//        "case when m.age <= 10 then '학생요금'" +
+//        "     when m.age >= 60 then '경로요금'" +
+//        " else '일반요금' end " +
+//        "  from Member m";
+//        List<String> query1 = em.createQuery(query, String.class).getResultList();
+//String query = "select coalesce(m.username, '이름없는 회원') from Member m";
+//String query = "select nullif(m.username, '관리자') as username " +
+//        "from Member m";
+//        List<String> query1 = em.createQuery(query, String.class).getResultList();
+//
+//        for (String s : query1) {
+//        System.out.println("s = " + s);
+//        }
+
+
 public class JpaMain {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -62,7 +93,6 @@ public class JpaMain {
             em.persist(team);
 
             Member member = new Member();
-            member.setUsername("teamA");
             member.setAge(10);
             member.setMemberType(MemberType.ADMIN);
 
@@ -73,17 +103,8 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query = "select m.username, 'HELLO', TRUE from Member m " +
-                    "where m.memberType = :userType";
-            List<Object[]> result = em.createQuery(query)
-                    .setParameter("userType", MemberType.ADMIN)
-                    .getResultList();
 
-            for (Object[] objects : result) {
-                System.out.println("objects[0] = " + objects[0]);
-                System.out.println("objects[0] = " + objects[1]);
-                System.out.println("objects[0] = " + objects[2]);
-            }
+
 
             tx.commit();
         } catch (Exception e) {
