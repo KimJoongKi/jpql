@@ -24,6 +24,29 @@ import java.util.List;
 //        System.out.println("member1 = " + member1);
 //        }
 
+
+//조인
+//        Team team = new Team();
+//        team.setName("teamA");
+//        em.persist(team);
+//
+//        Member member = new Member();
+//        member.setUsername("teamA");
+//        member.setAge(10);
+//
+//        member.setTeam(team);
+//
+//        em.persist(member);
+//
+//        em.flush();
+//        em.clear();
+//
+//        String query = "select m from Member m left join Team t on m.username = t.name";
+//        List<Member> resultList = em.createQuery(query, Member.class)
+//        .getResultList();
+//
+//        System.out.println("resultList = " + resultList.size());
+
 public class JpaMain {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -41,6 +64,7 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("teamA");
             member.setAge(10);
+            member.setMemberType(MemberType.ADMIN);
 
             member.setTeam(team);
 
@@ -49,11 +73,17 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query = "select m from Member m left join Team t on m.username = t.name";
-            List<Member> resultList = em.createQuery(query, Member.class)
+            String query = "select m.username, 'HELLO', TRUE from Member m " +
+                    "where m.memberType = :userType";
+            List<Object[]> result = em.createQuery(query)
+                    .setParameter("userType", MemberType.ADMIN)
                     .getResultList();
 
-            System.out.println("resultList = " + resultList.size());
+            for (Object[] objects : result) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[0] = " + objects[1]);
+                System.out.println("objects[0] = " + objects[2]);
+            }
 
             tx.commit();
         } catch (Exception e) {
