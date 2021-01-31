@@ -1,6 +1,7 @@
 package jpql;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 //페이징
@@ -77,6 +78,46 @@ import java.util.List;
 //        System.out.println("s = " + s);
 //        }
 
+//페치 조이 1
+//        Team teamA = new Team();
+//        teamA.setName("팀A");
+//        em.persist(teamA);
+//
+//        Team teamB = new Team();
+//        teamB.setName("팀B");
+//        em.persist(teamB);
+//
+//        Member member = new Member();
+//        member.setUsername("회원1");
+//        member.setTeam(teamA);
+//        em.persist(member);
+//
+//        Member member1 = new Member();
+//        member1.setUsername("회원2");
+//        member1.setTeam(teamA);
+//        em.persist(member1);
+//
+//        Member member2 = new Member();
+//        member2.setUsername("회원3");
+//        member2.setTeam(teamB);
+//        em.persist(member2);
+//
+//        em.flush();
+//        em.clear();
+//
+//        String query = "select distinct t From Team t join fetch t.members";
+//        List<Team> resultList = em.createQuery(query, Team.class)
+//        .getResultList();
+//
+//        System.out.println("resultList.size() = " + resultList.size());
+//
+//        for (Team team : resultList) {
+//        System.out.println("team = " + team.getName() + "| members=" + team.getMembers());
+//        for (Member teamMember : team.getMembers()) {
+//        System.out.println("-> teamMember = " + teamMember);
+//        }
+//        }
+
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -88,25 +129,43 @@ public class JpaMain {
 
         try {
 
+            Team teamA = new Team();
+            teamA.setName("팀A");
+            em.persist(teamA);
+
+            Team teamB = new Team();
+            teamB.setName("팀B");
+            em.persist(teamB);
 
             Member member = new Member();
-            member.setUsername("관리자1");
+            member.setUsername("회원1");
+            member.setTeam(teamA);
             em.persist(member);
 
             Member member1 = new Member();
-            member1.setUsername("관리자2");
+            member1.setUsername("회원2");
+            member1.setTeam(teamA);
             em.persist(member1);
 
+            Member member2 = new Member();
+            member2.setUsername("회원3");
+            member2.setTeam(teamB);
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
-            String query = "select function('group_concat', m.username) From Member m";
-            List<String> resultList = em.createQuery(query, String.class)
+            String query = "select distinct t From Team t join fetch t.members";
+            List<Team> resultList = em.createQuery(query, Team.class)
                     .getResultList();
 
-            for (String s : resultList) {
-                System.out.println("s = " + s);
+            System.out.println("resultList.size() = " + resultList.size());
+
+            for (Team team : resultList) {
+                System.out.println("team = " + team.getName() + "| members=" + team.getMembers());
+                for (Member teamMember : team.getMembers()) {
+                    System.out.println("-> teamMember = " + teamMember);
+                }
             }
 
 
