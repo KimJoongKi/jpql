@@ -118,6 +118,17 @@ import java.util.List;
 //        }
 //        }
 
+/*엔티티직접사용
+            String query = "select m from Member m where m = :member";
+            String query = "select m from Member m where m.team = :team";
+                    List<Member> members = em.createQuery(query, Member.class)
+        .setParameter("team", teamA)
+        .getResultList();
+
+        for (Member member3 : members) {
+        System.out.println("member3 = " + member3);
+        }
+        tx.commit();*/
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -155,15 +166,16 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-//            String query = "select m from Member m where m = :member";
-            String query = "select m from Member m where m.team = :team";
-            List<Member> members = em.createQuery(query, Member.class)
-                    .setParameter("team", teamA)
+            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username", "회원1")
                     .getResultList();
 
-            for (Member member3 : members) {
-                System.out.println("member3 = " + member3);
+            for (Member member3 : resultList) {
+                System.out.println("member3 = " + member3.getUsername());
+
             }
+
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
