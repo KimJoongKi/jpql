@@ -155,22 +155,15 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query = "select t From Team t";
-            List<Team> resultList = em.createQuery(query, Team.class)
-                    .setFirstResult(0)
-                    .setMaxResults(2)
+//            String query = "select m from Member m where m = :member";
+            String query = "select m from Member m where m.team = :team";
+            List<Member> members = em.createQuery(query, Member.class)
+                    .setParameter("team", teamA)
                     .getResultList();
 
-            System.out.println("resultList.size() = " + resultList.size());
-
-            for (Team team : resultList) {
-                System.out.println("team = " + team.getName() + "| members=" + team.getMembers());
-                for (Member teamMember : team.getMembers()) {
-                    System.out.println("-> teamMember = " + teamMember);
-                }
+            for (Member member3 : members) {
+                System.out.println("member3 = " + member3);
             }
-
-
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
